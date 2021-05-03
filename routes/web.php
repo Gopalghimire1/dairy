@@ -279,6 +279,7 @@ Route::group([ 'middleware' => 'role:admin','prefix'=>'admin'],function (){
             Route::match(['GET','POST'],'employee','ReportController@employee')->name('emp');
             Route::match(['GET','POST'],'credit','ReportController@credit')->name('credit');
             Route::post('employee/changeSession','ReportController@employeeSession')->name('emp.session');
+            Route::match(['GET','POST'],'expenses','ReportController@expense')->name('expense');
 
         });
     });
@@ -324,7 +325,6 @@ Route::group(['middleware' => 'role:farmer','prefix'=>'farmer'], function (){
         Route::get('change-password', 'Users\FarmerDashboardController@changePasswordPage')->name('password.page');
     });
 });
-
 
 
 Route::group(['middleware' => 'role:distributer','prefix'=>'distributor'], function (){

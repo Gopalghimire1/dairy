@@ -78,6 +78,17 @@
             Credit <br> Report
         </span>
     </div>
+
+    <div class="col-md-2 section href" data-target="{{route('report.expense')}}">
+        <span class="icon">
+            <i class="zmdi zmdi-money-off"></i>
+
+        </span>
+        <span class="divider"></span>
+        <span class="text">
+            Expenses <br> Report
+        </span>
+    </div>
 </div>
 @endsection
 @section('js')

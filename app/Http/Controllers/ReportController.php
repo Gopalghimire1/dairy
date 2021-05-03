@@ -22,7 +22,7 @@ use App\Models\SessionWatch;
 use App\Models\FarmerSession;
 use App\Models\EmployeeAdvance;
 use App\Models\EmployeeReport;
-
+use App\Models\Expense;
 use App\NepaliDate;
 use Illuminate\Http\Request;
 
@@ -365,9 +365,6 @@ class ReportController extends Controller
 
 
 
-
-
-
             return view('admin.report.milk.data',compact('data1'));
 
 
@@ -697,5 +694,54 @@ class ReportController extends Controller
         $distributorcredit =\App\Models\User::where('role',2)->where('amount','>',0)->where('amounttype',1)->get();
         return view('admin.report.credit.index',compact('farmercredit','distributorcredit'));
 
+    }
+
+
+    public function expense(Request $request){
+        if($request->isMethod('post')){
+            $type=$request->type;
+            $range=[];
+            $data=[];
+            $data = Expense::orderBy('id','desc');
+
+            if($type==0){
+
+            }elseif($type==1){
+                $date=$date = str_replace('-','',$request->date1);
+                $data=$data->where('date','=',$date);
+
+            }elseif($type==2){
+                $range=NepaliDate::getDateWeek($request->year,$request->month,$request->week);
+               $data=$data->where('date','>=',$range[1])->where('date','<=',$range[2]);
+
+
+            }elseif($type==3){
+                $range=NepaliDate::getDateMonth($request->year,$request->month);
+               $data=$data->where('date','>=',$range[1])->where('date','<=',$range[2]);
+            }elseif($type==4){
+                $range=NepaliDate::getDateYear($request->year);
+               $data=$data->where('date','>=',$range[1])->where('date','<=',$range[2]);
+
+
+            }elseif($type==5){
+                $range[1]=str_replace('-','',$request->date1);;
+                $range[2]=str_replace('-','',$request->date2);;
+                $data=$data->where('date','>=',$range[1])->where('date','<=',$range[2]);
+            }
+            if($request->category_id == null){
+                $data=$data->get();
+            }
+            $hascat = false;
+            if($request->category_id != -1){
+                $hascat = true;
+                $data=$data->where('expcategory_id',$request->category_id)->get();
+            }else{
+                $data = $data->get();
+            }
+            return view('admin.report.expense.data',compact('data'));
+
+        }else{
+            return view('admin.report.expense.index');
+        }
     }
 }
