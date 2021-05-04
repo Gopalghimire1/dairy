@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\LedgerManage;
+use App\Models\FarmerReport;
 use App\Models\Ledger;
 use App\Models\MilkPayment;
 use App\Models\User;
@@ -32,19 +33,24 @@ class MilkPaymentController extends Controller
         $date = str_replace('-', '', $request->date);
 
         $user = User::join('farmers','users.id','=','farmers.user_id')->where('users.no',$request->no)->where('farmers.center_id',$request->center_id)->select('users.name','users.id','users.no','farmers.center_id')->first();
-        $payment=new MilkPayment();
-        $payment->session=$request->session;
-        $payment->year=$request->year;
-        $payment->month=$request->month;
-        $payment->center_id=$request->center_id;
-        $payment->amount=$request->amount;
-        $payment->user_id=$user->id;
-        $payment->save();
-        $payment->name=$user->name;
-        $payment->no=$user->no;
-        $ledger=new LedgerManage($user->id);
-        $ledger->addLedger('Payment Milk Payment Given To Farmer',1,$request->amount,$date,'121',$payment->id);
-        return view('admin.milk.payment.single',compact('payment'));
+        $sessionChecked = FarmerReport::where(['user_id'=>$user->id,'year'=>$request->year,'month'=>$request->month,'session'=>$request->session])->count();
+        if($sessionChecked>0){
+            $payment=new MilkPayment();
+            $payment->session=$request->session;
+            $payment->year=$request->year;
+            $payment->month=$request->month;
+            $payment->center_id=$request->center_id;
+            $payment->amount=$request->amount;
+            $payment->user_id=$user->id;
+            $payment->save();
+            $payment->name=$user->name;
+            $payment->no=$user->no;
+            $ledger=new LedgerManage($user->id);
+            $ledger->addLedger('Payment Milk Payment Given To Farmer',1,$request->amount,$date,'121',$payment->id);
+            return view('admin.milk.payment.single',compact('payment'));
+        }else{
+            return '<tr class="text-center"><td colspan="4"> <strong> <span class="text-danger">Your payment has been failed due to Session is not closed yet !</span></strong></td></tr>';
+        }
     }
 
     public function update(Request $request){
