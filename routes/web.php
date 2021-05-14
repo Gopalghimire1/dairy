@@ -291,7 +291,10 @@ Route::group([ 'middleware' => 'role:admin','prefix'=>'admin'],function (){
         });
     });
 
-
+    Route::prefix('cash-flow')->name('cash.flow.')->group(function () {
+        Route::get('','Admin\CashflowController@index')->name('index');
+        Route::post('data','Admin\CashflowController@data')->name('data');
+    });
 
     Route::prefix('home-setting')->name('setting.')->group(function(){
         Route::match(['GET','POST'],'about','Admin\HomepageController@abountus')->name('about');

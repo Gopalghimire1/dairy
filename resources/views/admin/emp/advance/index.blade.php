@@ -17,7 +17,7 @@
 
             <div class="col-lg-3">
                 <label for="date">Date</label>
-                <input type="text" name="date" id="nepali-datepicker" class="form-control next" data-next="u_id">
+                <input type="text" name="date" id="nepali-datepicker" class="form-control next" data-next="u_id" changed="console.log('event')">
             </div>
 
             <div class="col-lg-4">
@@ -125,6 +125,10 @@
         loadAdvance();
     });
 
+
+    $("input#nepali-datepicker").bind('changed', function (e) {
+        loadAdvance();
+    });
     function loadAdvance(){
         var date = $('#nepali-datepicker').val();
 

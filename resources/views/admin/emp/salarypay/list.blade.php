@@ -10,6 +10,9 @@
                     <th>Amount (Rs.)</th>
                 </tr>
                 @if (count($salary)>0)
+                @php
+                    $total = 0;
+                @endphp
                 @foreach ($salary as $item)
                     <tr>
                         <td>{{ _nepalidate($item->date) }}</td>
@@ -17,7 +20,14 @@
                         <td>{{ $item->amount }}</td>
                         <input type="hidden" value="{{ $item->amount }}" id="paid_salary">
                     </tr>
+                    @php
+                        $total += $item->amount;
+                    @endphp
                 @endforeach
+                <tr>
+                    <td colspan="2" class="text-right"><strong>Total</strong> </td>
+                    <td><strong> {{$total}} </strong></td>
+                </tr>
                 @else
                     <tr>
                         <td colspan="3" class="text-center">Not Paid Yet !</td>

@@ -112,5 +112,15 @@
                 Reports
             </span>
         </div>
+
+        <div class="col-md-2 section href" data-target="{{route('cash.flow.index')}}">
+            <span class="icon">
+                <i class="zmdi zmdi-money"></i>
+            </span>
+            <span class="divider"></span>
+            <span class="text text-center">
+                Cash <br> Flow
+            </span>
+        </div>
     </div>
 @endsection

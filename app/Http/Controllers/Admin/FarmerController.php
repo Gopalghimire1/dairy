@@ -134,6 +134,7 @@ class FarmerController extends Controller
     // }
 
     public function loadDate(Request $r){
+        // dd($r->all());
         $range=NepaliDate::getDate($r->year,$r->month,$r->session);
         $data=$r->all();
         $farmer1=User::where('id',$r->user_id)->first();
@@ -211,9 +212,10 @@ class FarmerController extends Controller
         }
 
         $farmer1->ledger = Ledger::where('user_id',$r->user_id)->where('date','>=',$range[1])->where('date','<=',$range[2])->orderBy('id','asc')->get();
-
+        $milk_rate = FarmerReport::where(['user_id'=>$r->user_id,'year'=>$r->year,'month'=>$r->month,'session'=>$r->session])->first();
+        // dd($milk_rate);
         // dd(compact('snfFats','milkData','data','center','farmer1'));
-        return view('admin.farmer.detail.index',compact('snfFats','milkData','data','center','farmer1'));
+        return view('admin.farmer.detail.index',compact('snfFats','milkData','data','center','farmer1','milk_rate'));
     }
 
 
