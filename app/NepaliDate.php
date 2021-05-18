@@ -37,7 +37,6 @@ class NepaliDate{
 
     public function prevSession(){
         $arr=[$this->year,$this->month,$this->session];
-
         $arr[2]=$this->session-1;
         if($arr[2]<1){
             $arr[1]=$this->month-1;
@@ -50,12 +49,13 @@ class NepaliDate{
         return $arr;
     }
 
-    public function isPrevClosed(){
+    public function isPrevClosed($user_id){
         $s=$this->prevSession();
         return \App\Models\FarmerReport::where([
             ['year',$s[0]],
             ['month',$s[1]],
             ['session',$s[2]],
+            ['user_id',$user_id],
         ])->count()>0;
     }
 

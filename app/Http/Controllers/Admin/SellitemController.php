@@ -20,8 +20,10 @@ class SellitemController extends Controller
 
     public function addSellItem(Request $request){
         $date = str_replace('-','',$request->date);
+        $user = User::join('farmers','users.id','=','farmers.user_id')->where('users.no',$request->user_id)->where('farmers.center_id',$request->center_id)->select('users.*','farmers.center_id')->first();
+        // dd($user->id);
         $d=new NepaliDate($date);
-        if(!$d->isPrevClosed()){
+        if(!$d->isPrevClosed($user->id)){
             return response('Previous session is not closed yet',500);
         }
         $item_id = Item::where('number',$request->number)->first();
@@ -33,7 +35,6 @@ class SellitemController extends Controller
             $sell_item->rate = $request->rate;
             $sell_item->due = $request->due;
             $sell_item->paid = $request->paid;
-            $user = User::join('farmers','users.id','=','farmers.user_id')->where('users.no',$request->user_id)->where('farmers.center_id',$request->center_id)->select('users.*','farmers.center_id')->first();
             // $user = User::where('no',$request->user_id)->first();
             $sell_item->user_id = $user->id;
             $sell_item->item_id = $item_id->id;
