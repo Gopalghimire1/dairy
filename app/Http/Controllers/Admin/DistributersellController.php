@@ -40,7 +40,6 @@ class DistributersellController extends Controller
 
     public function listDistributersell(Request $r){
         $date = str_replace('-','',$r->date);
-
         $sells = Distributorsell::where('date',$date)->get();
         // dd($sells,$date);
         return view('admin.distributer.sell.list',compact('sells'));

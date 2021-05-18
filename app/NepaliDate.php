@@ -35,6 +35,30 @@ class NepaliDate{
         return $data;
     }
 
+    public function prevSession(){
+        $arr=[$this->year,$this->month,$this->session];
+
+        $arr[2]=$this->session-1;
+        if($arr[2]<1){
+            $arr[1]=$this->month-1;
+            $arr[2]=2;
+            if($arr[1]<1){
+                $arr[0]=$this->year-1;
+                $arr[1]=12;
+            }
+        }
+        return $arr;
+    }
+
+    public function isPrevClosed(){
+        $s=$this->prevSession();
+        return \App\Models\FarmerReport::where([
+            ['year',$s[0]],
+            ['month',$s[1]],
+            ['session',$s[2]],
+        ])->count()>0;
+    }
+
     public static function getDateMonth($year,$month){
         $data=[];
         $date=$year*10000+$month*100;

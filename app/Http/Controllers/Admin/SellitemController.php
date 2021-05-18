@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\Ledger;
 use App\Models\Sellitem;
 use App\Models\User;
+use App\NepaliDate;
 use Illuminate\Http\Request;
 
 class SellitemController extends Controller
@@ -19,6 +20,10 @@ class SellitemController extends Controller
 
     public function addSellItem(Request $request){
         $date = str_replace('-','',$request->date);
+        $d=new NepaliDate($date);
+        if(!$d->isPrevClosed()){
+            return response('Previous session is not closed yet',500);
+        }
         $item_id = Item::where('number',$request->number)->first();
         if($item_id->stock>0){
             $item_id->stock = $item_id->stock - $request->qty;
