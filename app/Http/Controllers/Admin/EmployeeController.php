@@ -115,25 +115,82 @@ class EmployeeController extends Controller
 
     public function employeeDetail($id){
         $user = User::where('id',$id)->where('role',4)->first();
-        return view('admin.emp.detail',compact('user'));
+        // return view('admin.emp.detail',compact('user'));
+        return view('admin.emp.detail1',compact('user'));
     }
 
     public function loadEmployeeData(Request $request){
-        $range=[];
+        // $range=[];
         // dd($request->all());
-        $salary = SalaryPayment::where('user_id',$request->user_id);
-        $employee = EmployeeAdvance::join('employees','employees.id','=','employee_advances.employee_id')->where('employees.user_id',$request->user_id);
-        if($request->type == 1){
-            $range=NepaliDate::getDateYear($request->year);
-            $employee = $employee->where('employee_advances.date','>=',$range[1])->where('employee_advances.date','<=',$range[2])->get();
-            $salary = $salary->where('year',$request->year)->get();
-        }
-        if($request->type == 2){
-            $range=NepaliDate::getDateMonth($request->year,$request->month);
-            $employee = $employee->where('employee_advances.date','>=',$range[1])->where('employee_advances.date','<=',$range[2])->get();
-            $salary = $salary->where('year',$request->year)->where('month',$request->month)->get();
-        }
-        return view('admin.emp.data',compact('salary','employee'));
+        // $salary = SalaryPayment::where('user_id',$request->user_id);
+        // $employee = EmployeeAdvance::join('employees','employees.id','=','employee_advances.employee_id')->where('employees.user_id',$request->user_id);
+        // if($request->type == 1){
+        //     $range=NepaliDate::getDateYear($request->year);
+        //     $employee = $employee->where('employee_advances.date','>=',$range[1])->where('employee_advances.date','<=',$range[2])->get();
+        //     $salary = $salary->where('year',$request->year)->get();
+        // }
+        // if($request->type == 2){
+        //     $range=NepaliDate::getDateMonth($request->year,$request->month);
+        //     $employee = $employee->where('employee_advances.date','>=',$range[1])->where('employee_advances.date','<=',$range[2])->get();
+        //     $salary = $salary->where('year',$request->year)->where('month',$request->month)->get();
+        // }
+        // return view('admin.emp.data',compact('salary','employee'));
+
+            $year=$request->year;
+            $month=$request->month;
+            $week=$request->week;
+            $session=$request->session;
+            $type=$request->type;
+            $range=[];
+            $data=[];
+            $date=1;
+            $title="";
+            $ledger=Ledger::where('user_id',$request->user_id);
+            if($type==0){
+                $range = NepaliDate::getDate($request->year,$request->month,$request->session);
+                $ledger=$ledger->where('date','>=',$range[1])->where('date','<=',$range[2]);
+                $title="<span class='mx-2'>Year:".$year ."</span>";
+                $title.="<span class='mx-2'>Month:".$month ."</span>";
+                $title.="<span class='mx-2'>Session:".$session ."</span>";
+
+            }elseif($type==1){
+                $date=$date = str_replace('-','',$request->date1);
+               $ledger=$ledger->where('date','=',$date);
+               $title="<span class='mx-2'>Date:"._nepalidate($date) ."</span>";
+
+            }elseif($type==2){
+                $range=NepaliDate::getDateWeek($request->year,$request->month,$request->week);
+                $ledger=$ledger->where('date','>=',$range[1])->where('date','<=',$range[2]);
+                $title="<span class='mx-2'>Year:".$year ."</span>";
+                $title.="<span class='mx-2'>Month:".$month ."</span>";
+                $title.="<span class='mx-2'>Week:".$week ."</span>";
+
+            }elseif($type==3){
+                $range=NepaliDate::getDateMonth($request->year,$request->month);
+               $ledger=$ledger->where('date','>=',$range[1])->where('date','<=',$range[2]);
+               $title="<span class='mx-2'>Year:".$year ."</span>";
+                $title.="<span class='mx-2'>Month:".$month ."</span>";
+
+            }elseif($type==4){
+                $range=NepaliDate::getDateYear($request->year);
+                $ledger=$ledger->where('date','>=',$range[1])->where('date','<=',$range[2]);
+                $title="<span class='mx-2'>Year:".$year ."</span>";
+
+
+            }elseif($type==5){
+                $range[1]=str_replace('-','',$request->date1);;
+                $range[2]=str_replace('-','',$request->date2);;
+                 $ledger=$ledger->where('date','>=',$range[1])->where('date','<=',$range[2]);
+                 $title="<span class='mx-2'>from:".$request->date1 ."</span>";
+                $title.="<span class='mx-2'>To:".$request->date2 ."</span>";
+
+            }
+            // dd($ledger->toSql(),$ledger->getBindings());
+            $ledgers=$ledger->orderBy('id','asc')->get();
+            // dd($ledgers);
+            $user=User::where('id',$request->user_id)->first();
+
+        return view('admin.emp.data1',compact('ledgers','type','user','title'));
 
     }
 
@@ -179,7 +236,7 @@ class EmployeeController extends Controller
             $salaryPay->user_id = $employee->user_id;
             $salaryPay->save();
             $ledger=new LedgerManage($employee->user_id);
-            $ledger->addLedger('Salary Paid',1,$request->pay,$date,'124',$salaryPay->id);
+            $ledger->addLedger('Salary Paid for:-('.$request->year.'-'.$request->month.')',1,$request->pay,$date,'124',$salaryPay->id);
             echo 'ok';
         }
     }
