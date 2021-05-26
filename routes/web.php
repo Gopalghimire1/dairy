@@ -192,9 +192,9 @@ Route::group([ 'middleware' => 'role:admin','prefix'=>'admin'],function (){
     Route::post('employee/getadvance','Admin\EmployeeController@getAdvance')->name('admin.emp.advance.list');
     Route::post('employee/deladvance','Admin\EmployeeController@delAdvance')->name('admin.emp.advance.del')->middleware('authority');;
     Route::post('employee/updateadvance','Admin\EmployeeController@updateAdvance')->name('admin.emp.advance.update')->middleware('authority');
+    Route::post('advance/transfer','Admin\EmployeeController@amountTransfer')->name('amount.transfer');
 
     // XXX salary payment
-
     Route::prefix('employee/salary')->name('salary.')->group(function(){
         Route::get('/','Admin\EmployeeController@salaryIndex')->name('pay');
         Route::post('load','Admin\EmployeeController@loadEmpData')->name('load.emp.data');

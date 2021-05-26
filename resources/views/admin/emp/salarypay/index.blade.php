@@ -158,6 +158,43 @@
             }
     }
 
+// amount transfer
+function transferAmt(){
+            var date = $('#nepali-datepicker').val();
+            var emp_id = $('#employee_id').val();
+            var year = $('#year').val();
+            var month = $('#month').val();
+            var transfer_amount = $('#transfer_amount').val();
+            var desc = $('#p_detail').val();
+            if(transfer_amount<=0){
+                alert('please enter transfer amount');
+                return false;
+            }else{
+            if(confirm('Are you sure ?')){
+                  axios({
+                    method: 'post',
+                    url: '{{ route("amount.transfer")}}',
+                    data : {'date' : date,'emp_id':emp_id,'year':year,'month':month,'transfer_amount':transfer_amount,'desc':desc}
+                    })
+                    .then(function(response) {
+                        // console.log(response.data);
+                        if(response.data == 'ok'){
+                            showNotification('bg-success', 'Salary paid successfully!');
+                        }else{
+                            showNotification('bg-danger', 'Already paid !');
+                        }
+                        $('#p_amt').val(0);
+                        $('#transfer_amount').val(0);
+                        paidList();
+                    })
+                    .catch(function(response) {
+                        //handle error
+                        console.log(response);
+                    });
+                }
+            }
+}
+
     function paidList(){
             var year = $('#year').val();
             var month = $('#month').val();

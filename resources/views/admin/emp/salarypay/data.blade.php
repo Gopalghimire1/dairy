@@ -53,12 +53,32 @@
             <input type="hidden" value="{{$totAdv}}" id="tot-adv">
             <input type="text" class="form-control" id="p_amt" name="salary" min="0" step="0.001" readonly>
         </div>
+
         <div class="col-md-9 mt-1">
             <label for="detail">Payment Detail</label>
             <input type="text" class="form-control" id="p_detail" placeholder="Payment details">
         </div>
         <div class="col-md-3" >
             <span class="btn btn-primary btn-block" style="margin-top:35px;" onclick="salaryPayment();"> Pay Now </span>
+        </div>
+        <hr>
+
+        <div class="col-md-12 mt-5">
+            <input type="checkbox" onchange="
+            if(this.checked){
+                $('.trans').removeClass('d-none');
+            }else{
+                $('.trans').addClass('d-none');
+            }
+            ">
+            <label for="pay">Transfer Advance Amount </label>
+        </div>
+        <div class="col-md-4 trans d-none">
+            <label for="transfer amt">Transfer Amount</label>
+            <input type="number" id="transfer_amount" class="form-control" min="0" step="0.001">
+        </div>
+        <div class="col-md-3 trans d-none">
+            <span class="btn btn-primary btn-block" style="margin-top:35px;" onclick="transferAmt();"> Transfer Now </span>
         </div>
       </div>
     </div>

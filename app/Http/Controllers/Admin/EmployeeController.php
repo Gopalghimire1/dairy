@@ -90,7 +90,6 @@ class EmployeeController extends Controller
 
     public function updateAdvance(Request $request){
         $date = str_replace('-', '', $request->date);
-
         $advance=EmployeeAdvance::find($request->id);
         $tempamount=$advance->amount;
         $advance->title = $request->title;
@@ -104,7 +103,6 @@ class EmployeeController extends Controller
 
     public function delAdvance(Request $request){
         $date = str_replace('-','', $request->date);
-
         $advance=EmployeeAdvance::find($request->id);
         $tempamount=$advance->amount;
         $advance->delete();
@@ -191,7 +189,6 @@ class EmployeeController extends Controller
             $user=User::where('id',$request->user_id)->first();
 
         return view('admin.emp.data1',compact('ledgers','type','user','title'));
-
     }
 
     // employee salary pay
@@ -239,6 +236,35 @@ class EmployeeController extends Controller
             $ledger->addLedger('Salary Paid for:-('.$request->year.'-'.$request->month.')',1,$request->pay,$date,'124',$salaryPay->id);
             echo 'ok';
         }
+    }
+
+
+    public function amountTransfer(Request $request){
+        // dd($request->all());
+         $date = str_replace('-','',$request->date);
+         $employee = Employee::where('id',$request->emp_id)->first();
+         $checkUser = SalaryPayment::where('year',$request->year)->where('month',$request->month)->where('user_id',$employee->user_id)->count();
+         if($checkUser>0){
+             echo 'notok';
+         }else{
+             $salaryPay = new SalaryPayment();
+             $salaryPay->date = $date;
+             $salaryPay->year = $request->year;
+             $salaryPay->month = $request->month;
+             $salaryPay->amount = 0;
+             $salaryPay->payment_detail = $request->desc;
+             $salaryPay->user_id = $employee->user_id;
+             $salaryPay->save();
+             $ledger=new LedgerManage($employee->user_id);
+             $ledger->addLedger('Salary Paid through balance transfer for:-('.$request->year.'-'.$request->month.')',1,0,$date,'124',$salaryPay->id);
+             $advance = new EmployeeAdvance();
+             $advance->date = $date;
+             $advance->amount = $request->transfer_amount;
+             $advance->employee_id = $employee->id;
+             $advance->title = "Previous advance transfer";
+             $advance->save();
+             echo 'ok';
+         }
     }
 
     public function paidList(Request $request){
