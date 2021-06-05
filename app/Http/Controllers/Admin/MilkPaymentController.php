@@ -54,13 +54,15 @@ class MilkPaymentController extends Controller
     }
 
     public function update(Request $request){
+        // dd($request->all());
         $date = str_replace('-', '', $request->date);
         $payment=MilkPayment::find($request->id);
         $oldamount=$payment->amount;
         $payment->amount=$request->amount;
         $payment->save();
 
-        $ledger=Ledger::find($request->ledger_id);
+        $ledger=Ledger::find($request->id);
+        dd($ledger);
         $user=User::find($ledger->user_id);
         $ledgers=Ledger::where('id','>',$request->ledger_id)->where('user_id',$ledger->user_id)->orderBy('id','asc')->get();
 

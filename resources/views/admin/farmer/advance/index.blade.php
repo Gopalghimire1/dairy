@@ -156,7 +156,11 @@
                 }
             })
             .then(function(response) {
-                console.log(response);
+                console.log(response.data);
+                if(response.data == "notOk"){
+                    showNotification('bg-danger', 'Previous session is not closed yet!');
+                    return;
+                }
                 showNotification('bg-success', 'Farmer advance added successfully!');
                 $('#largeModal').modal('toggle');
                 $('#advanceData').prepend(response.data);

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Advance;
 use App\Models\Ledger;
+use App\Models\MilkPayment;
 use App\Models\Sellitem;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -174,6 +176,23 @@ class FarmerLedgerController extends Controller
 
         $track=0;
 
+        //check if it is advance
+        if($ledger->identifire == 104){
+            $adv = Advance::where('id',$ledger->foreign_key)->first();
+            $adv->amount = $request->amount;
+            $adv->save();
+        }
+
+        //check if is milk payment
+
+        if($ledger->identifire == 121){
+            $pay = MilkPayment::where('id',$ledger->foreign_key)->first();
+            $pay->amount = $request->amount;
+            $pay->save();
+        }
+
+
+
         //find first point
         if($ledger->cr>0){
             $track=(-1)*$ledger->cr;
@@ -213,6 +232,7 @@ class FarmerLedgerController extends Controller
             $ledger->cr=0;
         }
         $ledger->save();
+
 
         foreach($ledgers as $l){
 
@@ -308,6 +328,19 @@ class FarmerLedgerController extends Controller
             $t=1;
             $track=(-1)*$track;
 
+        }
+
+        //check if it is advance
+        if($ledger->identifire == 104){
+            $adv = Advance::where('id',$ledger->foreign_key)->first();
+            $adv->delete();
+        }
+
+         //check if is milk payment
+
+         if($ledger->identifire == 121){
+            $pay = MilkPayment::where('id',$ledger->foreign_key)->first();
+            $pay->delete();
         }
 
 

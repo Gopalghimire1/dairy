@@ -7,6 +7,7 @@ use App\LedgerManage;
 use App\Models\Advance;
 use App\Models\Ledger;
 use App\Models\User;
+use App\NepaliDate;
 use Illuminate\Http\Request;
 
 class AdvanceController extends Controller
@@ -20,6 +21,10 @@ class AdvanceController extends Controller
         $adv = new Advance();
         $user = User::join('farmers','users.id','=','farmers.user_id')->where('users.no',$request->no)->where('farmers.center_id',$request->center_id)->select('users.*','farmers.center_id')->first();
         // $user = User::where('no',$request->no)->first();
+        $d=new NepaliDate($date);
+        if(!$d->isPrevClosed($user->id)){
+            return response('notOk');
+        }
         if($user==null ){
             return response("Farmer Not Found",400);
         }else{
@@ -64,10 +69,7 @@ class AdvanceController extends Controller
    public function deleteFarmerAdvance($id){
         $adv = Advance::find($id);
         $ledger = Ledger::where(['user_id' => $adv->user_id, 'identifire' => '104', 'foreign_key' => $adv->id])->first();
-        $user = User::where('id',$adv->user_id)->first();
-        $user->amount = $user->amount - $adv->amount;
-        $user->save();
-        $ledger->delete();
+        LedgerManage::delLedger([$ledger]);
         $adv->delete();
     }
 }
