@@ -27,9 +27,11 @@
                         <th>
                             Farmer No
                         </th>
+
                         <th>
                             Farmer Name
                         </th>
+
                         <th>
                             Milk Amount
                         </th>
@@ -37,7 +39,13 @@
 
                 </thead>
                 <tbody>
+                    @php
+                        $mtotal = 0;
+                    @endphp
                     @foreach ($milkdatas as $milkdata)
+                    @php
+                        $mtotal += $milkdata->milk;
+                    @endphp
                         <tr>
                             <td>
                                 {{$milkdata->no}}
@@ -48,9 +56,12 @@
                             <td>
                                 {{$milkdata->milk}}
                             </td>
-
                         </tr>
                     @endforeach
+                    <tr>
+                        <td colspan="2"><strong>Total</strong></td>
+                        <td>{{ $mtotal }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

@@ -8,6 +8,7 @@ use App\Models\FarmerReport;
 use App\Models\Ledger;
 use App\Models\MilkPayment;
 use App\Models\User;
+use App\NepaliDate;
 use Illuminate\Http\Request;
 
 class MilkPaymentController extends Controller
@@ -34,7 +35,8 @@ class MilkPaymentController extends Controller
 
         $user = User::join('farmers','users.id','=','farmers.user_id')->where('users.no',$request->no)->where('farmers.center_id',$request->center_id)->select('users.name','users.id','users.no','farmers.center_id')->first();
         $sessionChecked = FarmerReport::where(['user_id'=>$user->id,'year'=>$request->year,'month'=>$request->month,'session'=>$request->session])->count();
-        if($sessionChecked>0){
+        $d=new NepaliDate($date);
+        if($sessionChecked>0 && $d->isPrevClosed($user->id)){
             $payment=new MilkPayment();
             $payment->session=$request->session;
             $payment->year=$request->year;
@@ -63,6 +65,7 @@ class MilkPaymentController extends Controller
 
         $ledger=Ledger::find($request->id);
         dd($ledger);
+        // XXX remain to bug fix
         $user=User::find($ledger->user_id);
         $ledgers=Ledger::where('id','>',$request->ledger_id)->where('user_id',$ledger->user_id)->orderBy('id','asc')->get();
 
