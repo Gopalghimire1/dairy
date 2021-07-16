@@ -108,7 +108,6 @@
                                 </div>
                                 <div class="col-md-6 b-1">
                                     <div class="row">
-                                        <input type="hidden" name="counter" id="counter" val="" />
                                         <div class="col-md-12 mt-4 mb-3">
                                             <table class="table table-bordered">
                                                 <thead>
@@ -211,6 +210,7 @@
                         $('#igrandtotal').val(0);
                         $('#ipaid').val(0);
                         $('#idue').val(0);
+                        $('#supplier').val('').change();;
                     })
                     .catch(function(response) {
                         //handle error
@@ -238,7 +238,7 @@
             // console.log(item);
             html = "<tr id='row-" + i + "'>";
             html += "<td>" + title + "<input type='hidden' name='ptr_" + i + "' value='" + title +
-                "' /> <input type='hidden' name='item_id_" + i + "' value='" + id + "' /></td>";
+                "' /> <input type='hidden' name='item_id_" + i + "' value='" + id + "' /><input type='hidden' name='counter[]' value='" + i + "' /></td>";
             html += "<td>" + $('#rate').val() + "<input type='hidden' name='rate_" + i + "' value='" + $('#rate').val() +
                 "'/></td>";
             html += "<td>" + $('#qty').val() + "<input type='hidden' name='qty_" + i + "' value='" + $('#qty').val() +
@@ -258,7 +258,8 @@
             $('#ptr').val('').change();
             $('#rate').val('0');
             $('#qty').val('1');
-            $('#total').val('0');
+            $('#total').val('0')
+          
             itemKeys.push(i);
             i += 1;
             suffle();

@@ -82,7 +82,7 @@ class SupplierController extends Controller
             $bill->user_id = $request->user_id;
             $bill->transport_charge = 0;
             $bill->save();
-            $traker = explode(',', $request->counter);
+            $traker =  $request->counter;
             $total=0;
             foreach ($traker as $key => $value) {
                 $billItem = new Supplierbillitem();

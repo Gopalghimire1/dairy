@@ -6,10 +6,13 @@ use App\Http\Controllers\Controller;
 use App\LedgerManage;
 use App\Models\Distributer;
 use App\Models\Distributerreq;
+use App\Models\DistributorPayment;
 use App\Models\Distributorsell;
 use App\Models\Ledger;
 use App\Models\User;
 use App\NepaliDate;
+use App\NepaliDateHelper;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -31,6 +34,8 @@ class DistributerController extends Controller
         $dis->user_id = $user->id;
         $dis->rate = $request->rate??0;
         $dis->amount = $request->amount??0;
+        $dis->credit_days = $request->credit_days;
+        $dis->credit_limit = $request->credit_limit;
         $dis->save();
         return view('admin.distributer.single',compact('user'));
     }
@@ -52,6 +57,8 @@ class DistributerController extends Controller
         $dis = Distributer::where('user_id',$user->id)->first();
         $dis->rate = $request->rate??0;
         $dis->amount = $request->amount??0;
+        $dis->credit_days = $request->credit_days;
+        $dis->credit_limit = $request->credit_limit;
         $dis->save();
         return view('admin.distributer.single',compact('user'));
 
@@ -175,6 +182,54 @@ class DistributerController extends Controller
         return redirect()->back();
     }
 
+    public function creditList(Request $request){
+        if($request->getMethod()=="POST"){
 
+        }else{
+            $credits=User::where('role',2)->where('amount','>',0)->where('amounttype',1)->get();
+
+            $data=[];
+            $s1=false;
+            $s2=false;
+            foreach ($credits as $key => $credit) {
+                $date=null;
+                $credit->dis=$credit->distributer();
+                $canprocess=false;
+                $latestPayment=DistributorPayment::where('user_id',$credit->id)->orderBy('date','desc')->first();
+                if($latestPayment==null){
+                    $latestLedger=Ledger::where('user_id',$credit->id)->orderBy('id','desc')->first();
+                    if($latestLedger!=null){
+                        $date=$latestLedger->date;
+                    }
+                }else{
+                    $date=$latestPayment->date;
+
+                }
+                if($canprocess){
+                    $s1=true;
+                }else{
+                    $dateHelper=NepaliDateHelper::withDate($date);
+                    $d=$dateHelper->_eng_date;
+                    $engdate=Carbon::createFromDate($d['year'],$d['month'],$d['date']);
+                    $compareDate=Carbon::now()->subDays($credit->dis->credit_days);
+                    // echo $engdate ."<br>";
+                    // echo $compareDate."<br>";
+                    if($engdate->lessThan($compareDate)){
+                        $s1=true;
+                    }
+                }
+
+                $s2=$credit->dis->credit_limit<$credit->amount;
+                // echo ($s1?1:0) ." - s1 <br>";
+                // echo ($s2?1:0) ." - s2 <br>";
+                if($s1 || $s2){
+                    $credit->date=$date;
+                    array_push($data,$credit);
+                }
+
+            }
+           return view('admin.distributer.credit.index',compact('data'));
+        }
+    }
 
 }

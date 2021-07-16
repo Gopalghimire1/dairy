@@ -61,7 +61,18 @@
                                     <input type="text" id="address" name="address" class="form-control " data-next="rate" placeholder="Enter distributer address" required>
                                 </div>
                             </div>
-
+                            <div class="col-lg-6">
+                                <label for="credit_days">Credit Days</label>
+                                <div class="form-group">
+                                    <input type="number" id="credit_days" name="credit_days" min="0" step="0.01" class="form-control next" data-next="address" placeholder="Enter Credit Days" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="credit_limit">Credit Limit</label>
+                                <div class="form-group">
+                                    <input type="number" id="credit_limit" name="credit_limit" min="0" step="0.01" class="form-control next" data-next="address" placeholder="Enter Credit Days" required>
+                                </div>
+                            </div>
                             {{-- <div class="col-lg-6">
                                 <label for="rate">Rate</label>
                                 <div class="form-group">
@@ -122,7 +133,18 @@
                                     <input type="text" id="eaddress" name="address" value="" class="form-control next" data-next="erate" placeholder="Enter distributer address" required>
                                 </div>
                             </div>
-
+                            <div class="col-lg-6">
+                                <label for="ecredit_days">Credit Days</label>
+                                <div class="form-group">
+                                    <input type="number" id="ecredit_days" name="credit_days" min="0" step="0.01" class="form-control next" data-next="address" placeholder="Enter Credit Days" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="ecredit_limit">Credit Limit</label>
+                                <div class="form-group">
+                                    <input type="number" id="ecredit_limit" name="credit_limit" min="0" step="0.01" class="form-control next" data-next="address" placeholder="Enter Credit Days" required>
+                                </div>
+                            </div>
                             {{-- <div class="col-lg-6">
                                 <label for="rate">Rate</label>
                                 <div class="form-group">

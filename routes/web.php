@@ -193,7 +193,13 @@ Route::group([ 'middleware' => 'role:admin','prefix'=>'admin'],function (){
     Route::get('distributer/request','Admin\DistributerController@distributerRequest')->name('admin.distri.request');
     Route::get('distributer/change/status/{id}','Admin\DistributerController@distributerRequestChangeStatus')->name('change.status');
 
+    // credit list
+    Route::match(['GET','POST'],'distributer/credit-list', 'Admin\DistributerController@creditList')->name('distributer.credit.list');
 
+    //XXX sms
+    Route::prefix('sms')->name('admin.sms.')->group(function(){
+        Route::post('distributer-credit','SMSController@distributerCredit')->name('distributer.credit');
+    });
 
     // XXX distributer sell
 
