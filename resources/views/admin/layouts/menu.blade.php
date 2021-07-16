@@ -52,6 +52,8 @@
                     <li><a href="{{ route('admin.dis.payemnt') }}" class="waves-effect waves-block">payment</a></li>
                     <li><a href="{{ route('distributer.detail.opening') }}" class="waves-effect waves-block">Account Opening</a></li>
                     <li><a href="{{ route('admin.distri.request') }}" class="waves-effect waves-block">Distributor Request</a></li>
+                    <li><a href="{{ url('admin/distributer/credit-list') }}" class="waves-effect waves-block">Credit SMS</a></li>
+
                 </ul>
             </li>
 
