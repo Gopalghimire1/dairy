@@ -26,9 +26,26 @@ class SellitemController extends Controller
         if(!$d->isPrevClosed($user->id)){
             return response('Previous session is not closed yet',500);
         }
+        $canadd = false;
         $item_id = Item::where('number',$request->number)->first();
-        if($item_id->stock>0){
-            $item_id->stock = $item_id->stock - $request->qty;
+        if(env('multi_stock',false)){
+            $stock=$item_id->stock($request->center_id);
+            if($stock==null){
+                $canadd=false;
+
+            }else{
+                if ($stock->amount >=$request->qty) {
+                    $canadd = true;
+                }
+            }
+        }else{
+
+            if ($item_id->stock >= $request->qty) {
+                $canadd = true;
+            }
+        }
+
+        if($canadd){
             $sell_item = new Sellitem();
             $sell_item->total = $request->total;
             $sell_item->qty = $request->qty;
@@ -39,8 +56,14 @@ class SellitemController extends Controller
             $sell_item->user_id = $user->id;
             $sell_item->item_id = $item_id->id;
             $sell_item->date = $date;
-            $item_id->save();
             $sell_item->save();
+            $item_id->stock = $item_id->stock - $request->qty;
+            $item_id->save();
+            if(env('multi_stock',false)){
+                $stock=$item_id->stock($request->center_id);
+                $stock->amount=$stock->amount-$request->qty;
+                $stock->save();
+            }
             $manager=new LedgerManage($user->id);
             $manager->addLedger($item_id->title.' ( Rs.'.$sell_item->rate.' x '.$sell_item->qty. ')',1,$request->total,$date,'103',$sell_item->id);
             if($request->paid>0){

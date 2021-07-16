@@ -12,6 +12,13 @@ class Supplierbill extends Model
     public function user(){
         return $this->belongsTo(User::class);
 
-       
+    }
+
+    public function billitems(){
+        return $this->hasMany(Supplierbillitem::class);
+    }
+
+    public function expense(){
+        return $this->hasMany(BillExpenses::class);
     }
 }

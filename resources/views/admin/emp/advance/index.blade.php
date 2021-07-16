@@ -129,12 +129,13 @@
     $("input#nepali-datepicker").bind('changed', function (e) {
         loadAdvance();
     });
+    
     function loadAdvance(){
         var date = $('#nepali-datepicker').val();
 
         axios({
                 method: 'post',
-                url: '{{ route("admin.emp.advance.list")}}',
+                url: '{{ route("admin.employee.advance.list")}}',
                 data : {'date' : date}
             })
             .then(function(response) {
@@ -142,10 +143,11 @@
                 $('#advanceData').empty();
                 $('#advanceData').html(response.data);
             })
-            .catch(function(response) {
+            .catch(function(err) {
                 //handle error
-                console.log(response);
-            });
+                console.log(err);
+                showNotification('bg-danger',err.response.data);
+        });
     }
 
     function update(id){
@@ -153,7 +155,7 @@
 
         axios({
                 method: 'post',
-                url: '{{ route("admin.emp.advance.update")}}',
+                url: '{{ route("admin.employee.advance.update")}}',
                 data : {
                     'date' : date,
                     'id':id,
@@ -164,10 +166,10 @@
             .then(function(response) {
                 showNotification('bg-success', 'Updated successfully!');
             })
-            .catch(function(response) {
+            .catch(function(err) {
                 //handle error
-                console.log(response);
-                showNotification('bg-danger', 'You have no authority!');
+                console.log(err);
+                showNotification('bg-danger',err.response.data);
 
             });
     }
@@ -177,7 +179,7 @@
         if (confirm('Are you sure?')) {
         axios({
                 method: 'post',
-                url: '{{ route("admin.emp.advance.del")}}',
+                url: '{{ route("admin.employee.advance.del")}}',
                 data : {
                     'date' : date,
                     'id':id
@@ -207,7 +209,7 @@
         var bodyFormData = new FormData(document.getElementById('form_validation'));
         axios({
                 method: 'post',
-                url: '{{ route("admin.emp.advance.add")}}',
+                url: '{{ route("admin.employee.advance.add")}}',
                 data: bodyFormData,
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -222,10 +224,10 @@
                 $('#amount').val(0);
                 $('#u_id').focus();
             })
-            .catch(function(response) {
+            .catch(function(err) {
                 //handle error
-                console.log(response);
-                showNotification('bg-danger','operation Faild!');
+                console.log(err);
+                showNotification('bg-danger',err.response.data);
             });
 
         }

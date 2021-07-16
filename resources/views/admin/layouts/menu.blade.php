@@ -57,18 +57,25 @@
 
             <li><a href="javascript:void(0);" class="waves-effect waves-block menu-toggle"><i class="zmdi zmdi-shopping-cart"></i><span>Suppliers</span></a>
                 <ul class="ml-menu">
-                    <li><a href="{{ route('admin.sup') }}" class="waves-effect waves-block">Supplier List</a></li>
+                    {{-- <li><a href="{{ route('admin.supplier.index') }}" class="waves-effect waves-block">Supplier List</a></li>
                     <li><a href="{{ route('admin.sup.bill') }}" class="waves-effect waves-block">Supplier Bill</a></li>
                     <li><a href="{{ route('supplier.pay') }}" class="waves-effect waves-block">Supplier Payment</a></li>
-                    <li><a href="{{ route('supplier.previous.balance') }}" class="waves-effect waves-block">Previous Blance</a></li>
+                    <li><a href="{{ route('supplier.previous.balance') }}" class="waves-effect waves-block">Previous Blance</a></li> --}}
+                    <li><a href="{{ route('admin.supplier.index') }}" class="waves-effect waves-block">Supplier List</a></li>
+                    <li><a href="{{ route('admin.supplier.bill') }}" class="waves-effect waves-block">Supplier Bill</a></li>
+                    <li><a href="{{ route('admin.supplier.pay') }}" class="waves-effect waves-block">Supplier Payment</a></li>
+                    <li><a href="{{ route('admin.supplier.previous.balance') }}" class="waves-effect waves-block">Previous Blance</a></li>
                 </ul>
             </li>
 
+
+
             <li><a href="javascript:void(0);" class="waves-effect waves-block menu-toggle"><i class="zmdi zmdi-shopping-cart"></i><span>Staff Manage</span></a>
                 <ul class="ml-menu">
-                    <li><a href="{{ route('admin.emp') }}" class="waves-effect waves-block">Employees </a></li>
-                    <li><a href="{{ route('admin.emp.advance') }}" class="waves-effect waves-block">Advance</a></li>
-                    <li><a href="{{ route('salary.pay') }}" class="waves-effect waves-block">Salary Pay</a></li>
+                    <li><a href="{{ route('admin.employee.index') }}" class="waves-effect waves-block">Employees </a></li>
+                    <li><a href="{{ route('admin.employee.account.index') }}" class="waves-effect waves-block">Account Opening</a></li>
+                    <li><a href="{{ route('admin.employee.advance') }}" class="waves-effect waves-block">Advance</a></li>
+                    <li><a href="{{ route('admin.salary.pay') }}" class="waves-effect waves-block">Salary Pay</a></li>
                 </ul>
             </li>
 

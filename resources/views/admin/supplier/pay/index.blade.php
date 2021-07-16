@@ -92,7 +92,7 @@
         alert('Please enter paid amount');
         return false;
        }else{
-        axios.post('{{ route("supplier.due.pay")}}',{
+        axios.post('{{ route("admin.supplier.due.pay")}}',{
             'id': $('#u_id').val(),
             'amount':$('#amount').val(),
             'method':$('#method').val(),
@@ -114,7 +114,7 @@
     function loaddata(){
         // $('#data').html();
         // list
-        axios.post('{{ route("supplier.due")}}',{
+        axios.post('{{ route("admin.supplier.due")}}',{
             'id': $('#u_id').val()
 
             })

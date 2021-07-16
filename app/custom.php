@@ -1,5 +1,4 @@
 <?php
-
 function _nepalidate($date){
     $year=(int)($date/10000);
     $date=$date%10000;

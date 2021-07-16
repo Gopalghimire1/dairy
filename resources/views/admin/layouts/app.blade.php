@@ -75,6 +75,22 @@
         </div>
     </section>
 
+    <div class="window " id="window">
+        <div class="inner-window">
+            <div class="top-bar">
+                <span id="wt">
+
+                </span>
+                <span id="wcc" onclick="win.hide()">
+                    close
+                </span>
+            </div>
+            <div class="content" id="wc">
+
+            </div>
+        </div>
+    </div>
+
 
     <div class="modal fade" id="menumodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg p-0 m-0" role="document" style="max-width:100vw;">
@@ -115,7 +131,14 @@
     <script src="{{ asset('backend/js/input.js') }}"></script>
     <script src="{{ asset('backend/js/jquery.hotkeys.js') }}"></script>
 
+    @include('admin.layouts.ledgerjs')
+
     @yield('js')
+    @yield('js1')
+    @yield('js2')
+    @yield('js3')
+    @yield('js4')
+    @yield('js5')
 </body>
 
 </html>

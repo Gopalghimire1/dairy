@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{{ asset('calender/nepali.datepicker.v3.2.min.css') }}" />
 @endsection
 @section('head-title')
-<a href="{{route('admin.emp')}}">Employee</a> / Details / {{$user->name}}
+<a href="{{route('admin.employee.index')}}">Employee</a> / Details / {{$user->name}}
 @endsection
 @section('toobar')
 @endsection
@@ -115,7 +115,7 @@
         };
         axios({
                 method: 'post',
-                url: '{{ route("admin.emp.load.data") }}',
+                url: '{{ route("admin.employee.load.data") }}',
                 data:data ,
         })
         .then(function(response) {

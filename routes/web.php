@@ -89,6 +89,8 @@ Route::group([ 'middleware' => 'role:admin','prefix'=>'admin'],function (){
     Route::get('item-delete/{id}','Admin\ItemController@deleteItem')->name('admin.item.delete')->middleware('authority');
     Route::post('item-update','Admin\ItemController@updateItem')->middleware('authority');
 
+    Route::match(['GET','POST'],'item-center-stock/{id}', 'Admin\ItemController@centerStock')->name('center-stock');
+
     // XXX sell items
     Route::get('sell-items','Admin\SellitemController@index')->name('admin.sell.item');
     Route::post('sell-item-add','Admin\SellitemController@addSellItem')->name('admin.sell.item.add');
@@ -114,34 +116,62 @@ Route::group([ 'middleware' => 'role:admin','prefix'=>'admin'],function (){
 
 
     // XXX suppliers
-    Route::get('suppliers', 'Admin\SupplierController@index')->name('admin.sup');
-    Route::post('add-supplier','Admin\SupplierController@addSupplier')->name('admin.sup.add');
-    Route::get('supplier-list', 'Admin\SupplierController@supplierList')->name('admin.sup.list');
-    Route::get('supplier-delete/{id}', 'Admin\SupplierController@deleteSupplier')->middleware('authority');
-    Route::post('supplier/update','Admin\SupplierController@updateSupplier');
-    Route::get('supplier/{id}', 'Admin\SupplierController@supplierDetail')->name('supplier.detail');
-    Route::get('supplier-payment', 'Admin\SupplierController@supplierPayment')->name('supplier.pay');
-    Route::post('supplier-due', 'Admin\SupplierController@supplierDue')->name('supplier.due');
-    Route::post('supplier-due-pay', 'Admin\SupplierController@supplierDuePay')->name('supplier.due.pay');
+    // Route::get('suppliers', 'Admin\SupplierController@index')->name('admin.sup');
+    // Route::post('add-supplier','Admin\SupplierController@addSupplier')->name('admin.sup.add');
+    // Route::get('supplier-list', 'Admin\SupplierController@supplierList')->name('admin.sup.list');
+    // Route::get('supplier-delete/{id}', 'Admin\SupplierController@deleteSupplier')->middleware('authority');
+    // Route::post('supplier/update','Admin\SupplierController@updateSupplier');
+    // Route::get('supplier/{id}', 'Admin\SupplierController@supplierDetail')->name('supplier.detail');
+    // Route::get('supplier-payment', 'Admin\SupplierController@supplierPayment')->name('supplier.pay');
+    // Route::post('supplier-due', 'Admin\SupplierController@supplierDue')->name('supplier.due');
+    // Route::post('supplier-due-pay', 'Admin\SupplierController@supplierDuePay')->name('supplier.due.pay');
 
 
     // XXX supplier bills
 
-    Route::get('supplier-bills', 'Admin\SupplierController@indexBill')->name('admin.sup.bill');
-    Route::post('supplier-bill-add', 'Admin\SupplierController@addBill')->name('admin.sup.bill.add');
-    Route::get('supplier-bill-list', 'Admin\SupplierController@listBill')->name('admin.sup.bill.list');
-    Route::post('supplier-bill-update', 'Admin\SupplierController@updateBill')->name('admin.sup.bill.update');
-    Route::get('supplier-bill-delete/{id}', 'Admin\SupplierController@deleteBill')->middleware('authority');
-    Route::post('supplier-bill-item', 'Admin\SupplierController@billItems')->name('admin.sup.bill.item.list');
+    // Route::get('supplier-bills', 'Admin\SupplierController@indexBill')->name('admin.sup.bill');
+    // Route::post('supplier-bill-add', 'Admin\SupplierController@addBill')->name('admin.sup.bill.add');
+    // Route::get('supplier-bill-list', 'Admin\SupplierController@listBill')->name('admin.sup.bill.list');
+    // Route::post('supplier-bill-update', 'Admin\SupplierController@updateBill')->name('admin.sup.bill.update');
+    // Route::get('supplier-bill-delete/{id}', 'Admin\SupplierController@deleteBill')->middleware('authority');
+    // Route::post('supplier-bill-item', 'Admin\SupplierController@billItems')->name('admin.sup.bill.item.list');
 
 
      // XXX supplier previous
 
-      Route::get('supplier-previous-balance', 'Admin\SupplierController@previousBalance')->name('supplier.previous.balance');
-      Route::post('supplier-previous-balance-add', 'Admin\SupplierController@previousBalanceAdd')->name('supplier.previous.balance.add');
-      Route::post('supplier-previous-balance-load', 'Admin\SupplierController@previousBalanceLoad')->name('supplier.previous.balance.load');
+    //   Route::get('supplier-previous-balance', 'Admin\SupplierController@previousBalance')->name('supplier.previous.balance');
+    //   Route::post('supplier-previous-balance-add', 'Admin\SupplierController@previousBalanceAdd')->name('supplier.previous.balance.add');
+    //   Route::post('supplier-previous-balance-load', 'Admin\SupplierController@previousBalanceLoad')->name('supplier.previous.balance.load');
 
 
+    Route::prefix('suppliers')->name('admin.supplier.')->group(function () {
+        // XXX suppliers
+        Route::get('', 'Admin\SupplierController@index')->name('index');
+        Route::post('add', 'Admin\SupplierController@add')->name('add');
+        Route::get('list', 'Admin\SupplierController@list')->name('list');
+        Route::post('delete', 'Admin\SupplierController@delete')->name('delete')->middleware('authority');
+        Route::post('update', 'Admin\SupplierController@update')->name('update');
+        //XXX supplier details
+        Route::get('detail/{id}', 'Admin\SupplierController@detail')->name('detail');
+        Route::post('load-detail', 'Admin\SupplierController@loadDetail')->name('load-detail');
+        Route::get('payment', 'Admin\SupplierController@payment')->name('pay');
+        Route::post('due', 'Admin\SupplierController@due')->name('due');
+        Route::post('due-pay', 'Admin\SupplierController@duePay')->name('due.pay');
+
+        // XXX supplier bills
+        Route::get('bills', 'Admin\SupplierController@indexBill')->name('bill');
+        Route::match(['GET','POST'],'bill-add', 'Admin\SupplierController@addBill')->name('bill.add');
+        Route::post('bill-list', 'Admin\SupplierController@listBill')->name('bill.list');
+        Route::post('bill-update', 'Admin\SupplierController@updateBill')->name('bill.update');
+        Route::get('bill-delete', 'Admin\SupplierController@deleteBill')->name('bill.delete')->middleware('authority');
+        Route::post('bill-item', 'Admin\SupplierController@billItems')->name('bill.item.list');
+        Route::get('bill-detail/{bill}', 'Admin\SupplierController@billDetail')->name('bill.item.detail');
+
+        // XXX supplier previous
+        Route::get('previous-balance', 'Admin\SupplierController@previousBalance')->name('previous.balance');
+        Route::post('previous-balance-add', 'Admin\SupplierController@previousBalanceAdd')->name('previous.balance.add');
+        Route::post('previous-balance-load', 'Admin\SupplierController@previousBalanceLoad')->name('previous.balance.load');
+    });
 
     // XXX distributer
     Route::get('distributers', 'Admin\DistributerController@index')->name('admin.dis');
@@ -178,28 +208,62 @@ Route::group([ 'middleware' => 'role:admin','prefix'=>'admin'],function (){
     Route::post('distributer-due-pay', 'Admin\DistributorPaymentController@pay')->name('admin.dis.pay');
 
 
+    Route::group(['prefix' => 'ledger1'], function () {
+        Route::name('ledger1.')->group(function () {
+            Route::match(['GET', 'POST'], 'update', 'Ledger1Controller@update')->name('update')->middleware('authority');
+            Route::match(['GET', 'POST'], 'edit', 'Ledger1Controller@edit')->name('edit')->middleware('authority');
+            Route::match(['GET', 'POST'], 'del', 'Ledger1Controller@del')->name('del')->middleware('authority');
+        });
+    });
     // XXX XXX employees
-    Route::get('employees', 'Admin\EmployeeController@index')->name('admin.emp');
-    Route::post('employee-add', 'Admin\EmployeeController@addEmployee')->name('admin.emp.add');
-    Route::post('employee/update', 'Admin\EmployeeController@updateEmployee')->middleware('authority');
-    Route::get('employee-list', 'Admin\EmployeeController@employeeList')->name('admin.emp.list');
-    Route::get('employee/delete/{id}', 'Admin\EmployeeController@employeeDelete')->middleware('authority');
-    Route::get('employee/detail/{id}', 'Admin\EmployeeController@employeeDetail')->name('emp.detail');
-    Route::post('load/emp/data', 'Admin\EmployeeController@loadEmployeeData')->name('admin.emp.load.data');
+    Route::prefix('employees')->name('admin.employee.')->group(function () {
+        // XXX XXX employees
+        Route::get('', 'Admin\EmployeeController1@index')->name('index');
+        Route::post('add', 'Admin\EmployeeController1@add')->name('add');
+        Route::post('update', 'Admin\EmployeeController1@update')->name('update')->middleware('authority');
+        Route::get('list', 'Admin\EmployeeController1@list')->name('list');
+        Route::post('delete', 'Admin\EmployeeController1@delete')->name('delete')->middleware('authority');
+        Route::get('detail/{id}', 'Admin\EmployeeController1@detail')->name('detail');
+        Route::post('load/emp/data', 'Admin\EmployeeController1@loadData')->name('load.data');
+        //XXX Employee Advance Management
+        Route::get('advance', 'Admin\EmployeeController1@advance')->name('advance');
+        Route::post('addadvance', 'Admin\EmployeeController1@addAdvance')->name('advance.add');
+        Route::post('getadvance', 'Admin\EmployeeController1@getAdvance')->name('advance.list');
+        Route::post('deladvance', 'Admin\EmployeeController1@delAdvance')->name('advance.del')->middleware('authority');;
+        Route::post('updateadvance', 'Admin\EmployeeController1@updateAdvance')->name('advance.update')->middleware('authority');
+        Route::post('advance/transfer', 'Admin\EmployeeController1@amountTransfer')->name('amount.transfer');
+        //XXX Employee Account Opening
+        Route::match(['get', 'post'],'account', 'Admin\EmployeeController1@accountIndex')->name('account.index');
+        Route::match(['get', 'post'],'account-add', 'Admin\EmployeeController1@accountAdd')->name('account.add');
+        //XXX Employee Month Closing
+        Route::post('account-closing', 'Admin\EmployeeController1@closeSession')->name('account.close');
 
-    Route::get('employee/advance','Admin\EmployeeController@advance')->name('admin.emp.advance');
-    Route::post('employee/addadvance','Admin\EmployeeController@addAdvance')->name('admin.emp.advance.add');
-    Route::post('employee/getadvance','Admin\EmployeeController@getAdvance')->name('admin.emp.advance.list');
-    Route::post('employee/deladvance','Admin\EmployeeController@delAdvance')->name('admin.emp.advance.del')->middleware('authority');;
-    Route::post('employee/updateadvance','Admin\EmployeeController@updateAdvance')->name('admin.emp.advance.update')->middleware('authority');
-    Route::post('advance/transfer','Admin\EmployeeController@amountTransfer')->name('amount.transfer');
 
-    // XXX salary payment
-    Route::prefix('employee/salary')->name('salary.')->group(function(){
-        Route::get('/','Admin\EmployeeController@salaryIndex')->name('pay');
-        Route::post('load','Admin\EmployeeController@loadEmpData')->name('load.emp.data');
-        Route::post('pay/salary','Admin\EmployeeController@storeSalary')->name('save');
-        Route::post('list','Admin\EmployeeController@paidList')->name('list');
+    });
+
+
+
+    // Route::get('employees', 'Admin\EmployeeController@index')->name('admin.emp');
+    // Route::post('employee-add', 'Admin\EmployeeController@addEmployee')->name('admin.emp.add');
+    // Route::post('employee/update', 'Admin\EmployeeController@updateEmployee')->middleware('authority');
+    // Route::get('employee-list', 'Admin\EmployeeController@employeeList')->name('admin.emp.list');
+    // Route::get('employee/delete/{id}', 'Admin\EmployeeController@employeeDelete')->middleware('authority');
+    // Route::get('employee/detail/{id}', 'Admin\EmployeeController@employeeDetail')->name('emp.detail');
+    // Route::post('load/emp/data', 'Admin\EmployeeController@loadEmployeeData')->name('admin.emp.load.data');
+
+    // Route::get('employee/advance','Admin\EmployeeController@advance')->name('admin.emp.advance');
+    // Route::post('employee/addadvance','Admin\EmployeeController@addAdvance')->name('admin.emp.advance.add');
+    // Route::post('employee/getadvance','Admin\EmployeeController@getAdvance')->name('admin.emp.advance.list');
+    // Route::post('employee/deladvance','Admin\EmployeeController@delAdvance')->name('admin.emp.advance.del')->middleware('authority');;
+    // Route::post('employee/updateadvance','Admin\EmployeeController@updateAdvance')->name('admin.emp.advance.update')->middleware('authority');
+    // Route::post('advance/transfer','Admin\EmployeeController@amountTransfer')->name('amount.transfer');
+
+     // XXX salary payment
+     Route::prefix('employee/salary')->name('admin.salary.')->group(function () {
+        Route::get('/', 'Admin\EmployeeController1@salaryIndex')->name('pay');
+        Route::post('load', 'Admin\EmployeeController1@loadEmpData')->name('load.emp.data');
+        Route::post('pay/salary', 'Admin\EmployeeController1@storeSalary')->name('save');
+        Route::post('list', 'Admin\EmployeeController1@paidList')->name('list');
     });
 
 

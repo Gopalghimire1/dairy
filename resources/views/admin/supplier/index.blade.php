@@ -135,7 +135,7 @@
         var bodyFormData = new FormData(document.getElementById('form_validation'));
         axios({
                 method: 'post',
-                url: '{{ route("admin.sup.add")}}',
+                url: '{{ route("admin.supplier.add")}}',
                 data: bodyFormData,
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -161,7 +161,7 @@
         var bodyFormData = new FormData(document.getElementById('editform'));
         axios({
                 method: 'post',
-                url: '/admin/supplier/update',
+                url: '{{route('admin.supplier.update')}}',
                 data: bodyFormData,
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -181,7 +181,7 @@
 
     axios({
             method: 'get',
-            url: '{{ route("admin.sup.list")}}',
+            url: '{{ route("admin.supplier.list")}}',
         })
         .then(function(response) {
             // console.log(response.data);
@@ -195,11 +195,12 @@
 
     // delete
     function removeData(id) {
-        var dataid = id;
+
         if (confirm('Are you sure?')) {
             axios({
                     method: 'get',
-                    url: '/admin/supplier-delete/'+ dataid,
+                    url: '{{route('admin.supplier.delete')}}' ,
+                    data:{"id":id}
                 })
                 .then(function(response) {
                     // console.log(response.data);

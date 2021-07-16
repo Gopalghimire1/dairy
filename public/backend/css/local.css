@@ -48,4 +48,56 @@
 .section_1 {
   height: 130px !important;
 }
+
+.window {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 25px 50px;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  display: none;
+}
+
+.window.shown {
+  display: block;
+}
+
+.window .inner-window {
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+}
+
+.window .inner-window .top-bar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  height: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  border-bottom: 1px solid #888888;
+  padding: 15px;
+}
+
+.window .inner-window .top-bar #wt {
+  font-weight: 600;
+}
+
+.window .inner-window .top-bar #wcc {
+  cursor: pointer;
+}
+
+.window .inner-window .content {
+  height: calc(100% - 50px);
+  overflow: auto;
+}
 /*# sourceMappingURL=local.css.map */

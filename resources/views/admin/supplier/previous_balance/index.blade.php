@@ -29,7 +29,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="date">Date</label>
-                        <input readonly type="text" name="date" id="nepali-datepicker" class="form-control next" data-next="supplier_id" placeholder="Date" onchange="">
+                        <input readonly type="text" name="date" id="nepali-datepicker" class="calender form-control next" data-next="supplier_id" placeholder="Date" onchange="">
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -101,6 +101,7 @@
 {{-- @include('admin.distributer.sell.editmodal') --}}
 @endsection
 @section('js')
+@include('admin.js')
 <script src="{{ asset('backend/plugins/select2/select2.min.js') }}"></script>
 <script src="{{ asset('backend/js/pages/forms/advanced-form-elements.js') }}"></script>
 <script src="{{ asset('calender/nepali.datepicker.v3.2.min.js') }}"></script>
@@ -120,7 +121,7 @@
             var bodyFormData = new FormData(document.getElementById('sellitemData'));
             axios({
                     method: 'post',
-                    url: '{{ route("supplier.previous.balance.add")}}',
+                    url: '{{ route("admin.supplier.previous.balance.add")}}',
                     data: bodyFormData,
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -142,39 +143,9 @@
         }
     }
 
-    // delete
-
-    // function removeData(id) {
-    //     if (confirm('Are you sure?')) {
-    //         axios({
-    //                 method: 'post',
-    //                 url: '{{route("distributer.detail.ledger.update")}}',
-    //                 data:{
-    //                     'id':id
-    //                 }
-    //             })
-    //             .then(function(response) {
-    //                 showNotification('bg-danger', 'Sellitem deleted successfully!');
-    //                 $('#ledger-' + id).remove();
-    //             })
-    //             .catch(function(err) {
-    //                 showNotification('bg-danger', err.response.data);
-    //             })
-    //     }
-    // }
-
-
-
-    var month = ('0'+ NepaliFunctions.GetCurrentBsDate().month).slice(-2);
-    var day = ('0' + NepaliFunctions.GetCurrentBsDate().day).slice(-2);
-    $('#nepali-datepicker').val(NepaliFunctions.GetCurrentBsYear() + '-' + month + '-' + day);
-    $('#currentdate').val(NepaliFunctions.GetCurrentBsYear() + '-' + month + '-' + day);
 
     window.onload = function() {
-        var mainInput = document.getElementById("nepali-datepicker");
-        mainInput.nepaliDatePicker();
-        // var edit = document.getElementById("enepali-datepicker");
-        // edit.nepaliDatePicker();
+
         $('#id').focus();
         loadData();
     };
@@ -182,7 +153,7 @@
     function loadData(){
         $('#datas').html("");
         // list
-        axios.post('{{ route("supplier.previous.balance.load")}}',{
+        axios.post('{{ route("admin.supplier.previous.balance.load")}}',{
             'date': $('#nepali-datepicker').val()
             })
         .then(function(response) {
@@ -205,24 +176,9 @@
 
 
     function delData(id){
-        if(confirm('Do you Want To delete Ledger Data')){
+        $('#ledger-'+id).remove();
 
-            axios({
-                method: 'post',
-                url: '{{ route("ledger.del")}}',
-                data:{'id':id}
-            })
-            .then(function(response) {
-                $('#ledger-'+id).remove();
 
-            })
-            .catch(function(response) {
-                //handle error
-                console.log(response);
-                showNotification('bg-danger', 'You hove no authority!');
-
-            });
-        }
     }
 </script>
 @endsection
