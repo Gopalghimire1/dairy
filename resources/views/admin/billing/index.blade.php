@@ -78,6 +78,7 @@ input[type=number] {
     </style>
     @include('admin.billing.products')
     @include('admin.billing.distributors')
+    @include('admin.billing.add_customer')
     <div style="display:flex;flex-direction: column;height:100vh;">
         <div style="background: #355F79;">
             <div class="container py-2">
@@ -148,7 +149,7 @@ input[type=number] {
                     <input type="number" min="0" step="0.01" id="total" class="form-control"  >
                 </div>
                 <div class="col-md-4">
-                    <label for="item" id="customerName">__________________________</label> <br>
+                    <label for="item" id="customerName" onclick="showCustomer()">__________________________</label> <br>
                     <button class="btn btn-primary" onclick="showCustomer()">Select Customer</button>
                     <button class="btn btn-danger" onclick="resetCustomer()">Reset Customer</button>
                 </div>
@@ -251,6 +252,7 @@ input[type=number] {
     <script>
         toastr.options.progressBar = true;
         var i=0;
+        lock=false;
         $('#item').focusin(function(){
             $('.prodviwer').addClass('active');
         });
@@ -265,7 +267,7 @@ input[type=number] {
                 }else{
                     console.log($('#prod_'+id).data('product'));
                     var data= $('#prod_'+id).data('product');
-                    $('#rate').val(data.price);
+                    $('#rate').val(data.sell_price);
 
                 }
             }
@@ -319,8 +321,8 @@ input[type=number] {
 
             var data= $('#prod_'+id).data('product');
             var billitem={
-                id:id,
-                name:data.name,
+                id:data.id,
+                name:data.title,
                 rate:$("#rate").val(),
                 qty:$("#qty").val(),
                 total:$("#total").val(),
@@ -452,7 +454,7 @@ input[type=number] {
                 state=2;
             }else{
 
-                axios.post('{{route("billing.save")}}',fd)
+                axios.post('{{route("admin.billing.save")}}',fd)
                 .then((response)=>{
                     console.log(response.data);
                         alert('Bill Save successfully')

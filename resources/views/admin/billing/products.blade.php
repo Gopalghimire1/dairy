@@ -5,11 +5,11 @@
             <th>Name</th>
             <th>Rate</th>
         </tr>
-        @foreach (\App\Models\Product::all() as $product)
-        <tr  class="hovertr" id="prod_{{$product->id}}" data-product="{{$product->toJson()}}">
-            <td>{{$product->id}}</td>
-            <td>{{$product->name}}</td>
-            <td>{{$product->price}}</td>
+        @foreach (\App\Models\Item::all() as $product)
+        <tr  class="hovertr" id="prod_{{$product->number}}" data-product="{{$product->toJson()}}">
+            <td>{{$product->number}}</td>
+            <td>{{$product->title}}</td>
+            <td>{{$product->sell_price}}</td>
         </tr>
         @endforeach
     </table>

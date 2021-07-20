@@ -78,4 +78,8 @@ class User extends Authenticatable
     public function ledgers(){
         return $this->hasMany(Ledger::class);
     }
+
+    public function customerPayments(){
+        return $this->hasMany(CustomerPayment::class);
+    }
 }

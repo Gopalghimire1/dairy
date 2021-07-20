@@ -374,6 +374,34 @@ Route::group([ 'middleware' => 'role:admin','prefix'=>'admin'],function (){
         Route::match(['GET','POST'],'gallery/del/{gallery}','Admin\HomepageController@galleryDel')->name('gallery-del');
     });
 
+      ///XXX billing
+      Route::group(['prefix' => 'billing'], function () {
+        Route::name('admin.billing.')->group(function () {
+            Route::get('', 'Billing\BillingController@index')->name('home');
+            Route::get('detail/{id}', 'Billing\BillingController@detail')->name('detail');
+            Route::post('save', 'Billing\BillingController@save')->name('save');
+        });
+    });
+
+    //XXX Customer
+    Route::group(['prefix' => 'customer'], function () {
+        Route::name('admin.customer.')->group(function () {
+            Route::get('', 'Admin\CustomerController@index')->name('home');
+            Route::post('add', 'Admin\CustomerController@add')->name('add');
+            Route::post('update', 'Admin\CustomerController@update')->name('update')->middleware('authority');
+            Route::post('del', 'Admin\CustomerController@del')->name('del')->middleware('authority');
+
+            //detail
+            Route::match(['get', 'post'], 'detail/{id}','Admin\CustomerController@detail')->name('detail');
+
+            Route::name('payment.')->prefix('payment')->group(function(){
+                Route::match(['get', 'post'],  '','Admin\CustomerController@payment')->name('index');
+                Route::match(['get', 'post'],  'add','Admin\CustomerController@addPayment')->name('add');
+            });
+        });
+    });
+
+
 
     Route::group(['prefix' => 'user'], function(){
         Route::name('user.')->group(function(){

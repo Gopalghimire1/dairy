@@ -100,5 +100,14 @@ function closeModal(id,value){
     $('#'+id).val(value).change();
 }
 
+function showProgress(title){
+    $('#xxx_123').addClass('active');
+    $('#yyy_123').html(title);
+}
+
+function hideProgress(){
+    $('#xxx_123').removeClass('active');
+
+}
 
 

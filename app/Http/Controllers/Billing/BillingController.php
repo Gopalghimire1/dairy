@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\LedgerManage;
 use App\Models\Bill;
 use App\Models\BillItem;
+use App\Models\Customer;
 use App\Models\Distributer;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,8 +24,8 @@ class BillingController extends Controller
         // dd($date);
 
         if($request->id != -1){
-            $distributor = Distributer::where('id',$request->id)->first();
-            $user = User::where('id',$distributor->user_id)->first();
+            $customer = Customer::where('id',$request->id)->first();
+            $user = User::where('id' , $customer->user_id)->first();
             $bill->name = $user->name;
             $bill->address = $user->address;
             $bill->phone = $user->phone;
@@ -46,10 +47,10 @@ class BillingController extends Controller
             $bill->save();
 
             if($request->id!=-1){
-                $ledger->addLedger('Purchase ',1,$request->net,$date,123,$bill->id);
+                $ledger->addLedger('Purchase ',1,$request->net,$date,130,$bill->id);
 
                 if($request->paid>0){
-                    $ledger->addLedger('Paid Amount',2,$paidamount,$date,122,$bill->id);
+                    $ledger->addLedger('Paid Amount',2,$paidamount,$date,131,$bill->id);
                 }
             }
             // dd($request->billitems);
@@ -58,7 +59,7 @@ class BillingController extends Controller
                 // dd($bill->id);
                $item = new BillItem();
                $i=(object)$t;
-               $item->product_id = $i->id;
+               $item->item_id = $i->id;
                $item->name = $i->name;
                $item->rate = $i->rate;
                $item->qty = $i->qty;
@@ -75,4 +76,9 @@ class BillingController extends Controller
     }
 
 
+    public function detail($id){
+        $bill=Bill::find($id);
+        return view('admin.billing.detail',compact('bill'));
+
+    }
 }

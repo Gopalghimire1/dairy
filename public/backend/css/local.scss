@@ -81,3 +81,35 @@
         }
     }
 }
+
+.working{
+    z-index: 99999;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background: rgba(0,0,0,0.4);
+    flex-direction: column;
+    padding:0px 250px;
+    display: none;
+    &.active{
+        display:flex;
+    }
+    .working-child{
+        background: white;
+        width:100%;
+        padding:50px 100px;
+        text-align: center;
+        .working-title{
+            font-size: 25px;
+            font-weight:700;
+        }
+        img{
+            max-width:100px;
+        }
+    }
+}

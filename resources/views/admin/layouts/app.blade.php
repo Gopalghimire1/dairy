@@ -106,6 +106,7 @@
           </div>
         </div>
       </div>
+      @include('admin.layouts.working')
     <!-- Jquery Core Js -->
     <script>
         const printcss ='{{ asset("backend/css/print.css") }}';
