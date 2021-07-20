@@ -103,7 +103,12 @@
                    <li><a href="{{ route('manufacture.list') }}" class="waves-effect waves-block"><span>Manufactured List</span></a></li>
                 </ul>
             </li>
-            <li><a href="{{ url('admin/billing') }}" class="waves-effect waves-block"><i class="zmdi zmdi-shopping-cart"></i><span>Billing</span></a></li>
+            <li>
+                <a href="{{ url('admin/customer') }}" class="waves-effect waves-block"><i class="zmdi zmdi-shopping-cart"></i><span>Customers</span></a>
+            </li>
+            <li>
+                <a href="{{ url('admin/billing') }}" class="waves-effect waves-block"><i class="zmdi zmdi-shopping-cart"></i><span>Billing</span></a>
+            </li>
             @endif
             @if(env('tier',1) == 1)
             <li><a href="javascript:void(0);" class="waves-effect waves-block menu-toggle"><i class="zmdi zmdi-shopping-cart"></i><span>Home Page Setting</span></a>
